@@ -15,20 +15,7 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Doot - Speed Test - Slave");
 
-  for ()
-
-  while(Serial.available()) {
-
-    a = Serial.readString();// read the incoming data as string
-  }
-
-  if (a != "") {
-
-    Serial.println(a);
-    a = "";
-  }
-
-
+  Serial1.begin(300);
 
 
   // while (true) {
@@ -72,9 +59,37 @@ void setup() {
 
 void loop() {
 
-  Serial.println("loop");
 
-  delay(5000);
+
+  while(Serial1.available()) {
+
+    a = Serial1.readString();// read the incoming data as string
+  }
+
+  if (a != "") {
+
+    Serial.println(a);
+    a = "";
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // Serial.println("loop");
+  //
+  // delay(5000);
 
 
 } // loop
