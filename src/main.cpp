@@ -1,3 +1,6 @@
+
+// --------------------------- SLAVE ---------------------------
+
 #include <Arduino.h>
 
 #include <Auto_Serial_Speed.h>
@@ -6,54 +9,25 @@
 
 Auto_Serial_Speed STest(1);
 
-String inputString = "";
-char c;
 
 
 
-int Loop_Counter = 1;
 
 void setup() {
   Serial.begin(Serial_Speed);
-  Serial.println("Doot done - tx queue");
+  Serial.println("Doot - Speed Test - Slave");
 
 
-  STest.Test_Speed_Master(1);
-
-  while (!Serial1) {
-
-    Serial.println("!Serial1");
-    delay(250);
-
-  }
-
-  Serial.println("After");
+  STest.Test_Speed_Slave(1);
 
 
-  // while (Serial.available()) {
-  //
-  // c = (char)Serial.read();
-  // inputString += c;
-  // }
-  //
-  // if (inputString == "Ping") {
-  //   Serial.println("Ok");
-  //   Serial.flush();
-  // }
+  Serial.println("Doot Done - Speed Test - Slave");
 
 } // setup
 
 
 void loop() {
 
-
-
-  // Serial1.write(Loop_Counter);
-  //
-  // Serial.print("tx: ");
-  // Serial.println(Loop_Counter);
-  //
-  // Loop_Counter = Loop_Counter + 1;
 
   delay(1000);
 

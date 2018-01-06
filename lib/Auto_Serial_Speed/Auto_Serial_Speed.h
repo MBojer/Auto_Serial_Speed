@@ -4,6 +4,8 @@
 #ifndef Auto_Serial_Speed_h
   #define Auto_Serial_Speed_h
 
+  #define Speed_Test_String "HelloWorld123"
+
   #include "Arduino.h"
 
   class Auto_Serial_Speed {
@@ -25,9 +27,11 @@
       // --------------------------------------------- private ---------------------------------------------
       byte _Serial_Port;
 
-      byte _Check_Done_S1 = -1;
-      byte _Check_Done_S2 = -1;
-      byte _Check_Done_S3 = -1;
+      byte _Check_Done = 1;
+
+
+      String Read_String = "";
+      char c;
 
 
 
