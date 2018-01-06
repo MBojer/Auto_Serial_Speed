@@ -18,7 +18,7 @@ void setup() {
   Serial.println("Doot - Speed Test - Slave");
 
 
-  STest.Test_Speed_Slave(1);
+  STest.Test_Speed_Slave(1); 
 
 
   Serial.println("Doot Done - Speed Test - Slave");
