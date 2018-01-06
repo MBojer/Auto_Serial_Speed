@@ -3,33 +3,78 @@
 
 #include <Arduino.h>
 
-#include <Auto_Serial_Speed.h>
+#define Speed_Test_String "HelloWorld123"
 
-#define Serial_Speed 115200
+String Read_String = "";
+char c;
 
-Auto_Serial_Speed STest(1);
-
-
-
+String a;
 
 
 void setup() {
-  Serial.begin(Serial_Speed);
+  Serial.begin(115200);
   Serial.println("Doot - Speed Test - Slave");
 
+  for ()
 
-  STest.Test_Speed_Slave(1); 
+  while(Serial.available()) {
+
+    a = Serial.readString();// read the incoming data as string
+  }
+
+  if (a != "") {
+
+    Serial.println(a);
+    a = "";
+  }
+
+
+
+
+  // while (true) {
+  //
+  //     while (Serial.available()) { // Read data
+  //       c = (char)Serial.read();
+  //       Read_String += c;
+  //     } // while
+  //
+  //     if (Read_String != "") {
+  //       if (Read_String == "Read_String") {
+  //         Serial.println("Read_String == Read_String");
+  //         break;
+  //       }
+  //
+  //       else {
+  //         Serial.println(Read_String);
+  //         Read_String = "";
+  //       }
+  //
+  //     }
+  //
+  //
+  // }
+
+
+
+
+
+
+
+
 
 
   Serial.println("Doot Done - Speed Test - Slave");
+
+
 
 } // setup
 
 
 void loop() {
 
+  Serial.println("loop");
 
-  delay(1000);
+  delay(5000);
 
 
 } // loop

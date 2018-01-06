@@ -1,11 +1,11 @@
 
-Test_Speed_Master:
-  return:
-    1 = done and ok
-    2 = not done
 
-
-_Check_Done:
+_Check_Stats:
   1 = not done
   2 = done and ok
-  3 = not done
+
+  3 = Check String Mismatch, stepping one speed down and trying again
+
+
+  4 = Error - Port down
+  5 = Error

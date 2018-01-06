@@ -16,7 +16,7 @@ Auto_Serial_Speed::Auto_Serial_Speed(byte Serial_Port) {
 // --------------------------------------------- Test_Speed_Master ---------------------------------------------
 byte Auto_Serial_Speed::Test_Speed_Master(byte Serial_Port) {
 
-  if (_Check_Done != 1) return _Check_Done; // Check already done
+  if (_Check_Stats != 1) return _Check_Stats; // Check already done
 
   else { // Check not done
 
@@ -53,48 +53,14 @@ byte Auto_Serial_Speed::Test_Speed_Master(byte Serial_Port) {
 // --------------------------------------------- Test_Speed_Slave ---------------------------------------------
 byte Auto_Serial_Speed::Test_Speed_Slave(byte Serial_Port) {
 
-  if (_Check_Done != 1) return _Check_Done; // Check already done
+  if (_Check_Stats != Test_Done) return _Check_Stats; // Check already done
 
 
   if (Serial_Port == 1) {
 
     for (byte i = 1; i < 13; i++) {
 
-      Serial1.begin(Speed_Step(i));
 
-      for (byte ii = 0; ii == 255; ii++) { // Wait for date or else timeout
-
-        if (Serial1.available()) break;
-
-        else if (ii == 254) {
-          Serial.print("No responce on serial at speed: "); // rm
-          Serial.println(Speed_Step(i)); // rm
-          return 2; // change me
-        }
-
-        delay(25);
-
-      } // for
-
-
-      while (Serial1.available()) { // Read data
-        c = (char)Serial.read();
-        Read_String += c;
-      } // while
-
-
-      if (Read_String != Speed_Test_String) {
-        Serial.println("Read_String != Speed_Test_String"); // rm
-
-        delay(10000); // rm
-        return 2; // change me
-      } // if
-
-
-
-      Serial.println("END MARKER - for (byte i = 1; i < 13; i++)"); // rm
-      delay(10000); // rm
-      return 2; // change me
 
 
     } // for (byte i = 1; i < 13; i++)
@@ -114,6 +80,72 @@ byte Auto_Serial_Speed::Test_Speed_Slave(byte Serial_Port) {
 
 
 } // Test_Speed_Slave
+
+
+void Auto_Serial_Speed::Test_Speed(byte  Step_Nr) {
+
+  Serial1.begin(Speed_Step(Step_Nr));
+
+
+
+
+  for (byte i = 0; i == 255; i++) { // Wait for date or else timeout
+
+    if (Serial1.available()) break;
+
+    else if (i == 254) {
+      Serial.print("No responce on serial at speed: "); // rm
+      Serial.println(Speed_Step(Step_Nr)); // rm
+
+      Serial_Speed = Speed_Step(i - 1);
+
+      return; // change me
+    }
+
+    delay(25);
+
+  } // for
+
+
+  while (Serial1.available()) { // Read data
+    c = (char)Serial.read();
+    Read_String += c;
+  } // while
+
+
+  int i = 1; // change me
+
+  if (Read_String != Speed_Test_String) {
+
+    if (i == 1) { // Error - Port not up
+      Serial.println("ERROR: Serial port not up"); // rm
+      _Check_Stats = 4;
+    }
+
+    else { // Trying last speed
+      _Check_Stats = 3;
+
+      Serial.println("Read_String != Speed_Test_String"); // rm
+
+      Serial.print("Read_String: "); // rm
+      Serial.println(Read_String); // rm
+
+      Serial.print("i: "); // rm
+      Serial.println(i); // rm
+
+      Serial_Speed = Speed_Step(i - 1);
+    }
+
+
+    return; // change me
+  } // if
+
+
+
+  Serial.println("END MARKER - for (byte i = 1; i < 13; i++)"); // rm
+  delay(10000); // rm
+  return; // change me
+}
 
 
 unsigned long Auto_Serial_Speed::Speed_Step(byte Step) {

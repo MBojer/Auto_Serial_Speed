@@ -4,7 +4,10 @@
 #ifndef Auto_Serial_Speed_h
   #define Auto_Serial_Speed_h
 
+  #define Test_Not_Done 1
+  #define Test_Done 2
   #define Speed_Test_String "HelloWorld123"
+
 
   #include "Arduino.h"
 
@@ -19,7 +22,12 @@
       byte Test_Speed_Master(byte Serial_Port);
       byte Test_Speed_Slave(byte Serial_Port);
 
+      void Test_Speed(byte Step_Nr);
+
+
       unsigned long Speed_Step(byte Step);
+
+      unsigned long Serial_Speed;
 
 
 
@@ -27,7 +35,7 @@
       // --------------------------------------------- private ---------------------------------------------
       byte _Serial_Port;
 
-      byte _Check_Done = 1;
+      byte _Check_Stats = 1;
 
 
       String Read_String = "";
