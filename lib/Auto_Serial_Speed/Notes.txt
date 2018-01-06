@@ -1,0 +1,11 @@
+
+Test_Speed_Master:
+  return:
+    1 = done and ok
+    2 = not done
+
+
+_Check_Done:
+  1 = not done
+  2 = done and ok
+  3 = not done
