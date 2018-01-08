@@ -8,7 +8,7 @@
 
 bool CRC_Check() {
 
-  Serial1.flush();
+  Serial1.flush(); 
 
   bool Check_Failed_Once = false;
 
