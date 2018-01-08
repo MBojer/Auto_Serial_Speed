@@ -1,4 +1,6 @@
 
+TEST123
+
 // --------------------------- SLAVE ---------------------------
 
 #include <Arduino.h>
@@ -8,7 +10,7 @@
 
 bool CRC_Check() {
 
-  Serial1.flush(); 
+  Serial1.flush();
 
   bool Check_Failed_Once = false;
 
