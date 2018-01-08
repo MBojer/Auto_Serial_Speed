@@ -4,7 +4,3 @@
 .gcc-flags.json
 .pioenvs
 .piolibdeps
-
-
-src/
-src/main.cpp
