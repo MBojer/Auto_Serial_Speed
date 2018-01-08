@@ -16,11 +16,11 @@ void setup() {
   Serial.println("After dalay");
 
 
-  Serial.println("Master");
-  Speed_Test.Test_Speed_Master();
+  // Serial.println("Master");
+  // Speed_Test.Test_Speed_Master();
 
-  // Serial.println("Slave");
-  // Speed_Test.Test_Speed_Slave();
+  Serial.println("Slave");
+  Speed_Test.Test_Speed_Slave();
 
 
   Serial.println("Doot Done - Speed Test");

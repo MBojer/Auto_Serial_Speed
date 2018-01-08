@@ -4,14 +4,6 @@
 #ifndef Auto_Serial_Speed_h
   #define Auto_Serial_Speed_h
 
-  #define Boot_Ping "1337"
-  #define Boot_Retries 120 // This controls how long the master looks for the slave, it will be Boot_Retries * 250ms
-
-  #define Handshake_rx "Hello"
-  #define Handshake_tx "World"
-
-
-
 
   #include "Arduino.h"
 
@@ -25,8 +17,6 @@
       // --------------------------------------------- Auto_Serial_Speed ---------------------------------------------
       byte Test_Speed_Master();
       byte Test_Speed_Slave();
-
-      void Test_Speed(byte Step_Nr);
 
       bool Boot_Check(bool Mater);
 
@@ -46,6 +36,8 @@
       unsigned long Speed_Step(byte Step);
 
       unsigned long Serial_Speed;
+
+      unsigned long Selected_Speed;
 
 
 
