@@ -6,4 +6,5 @@
 .piolibdeps
 
 
-src/*.*
+src/
+src/main.cpp
