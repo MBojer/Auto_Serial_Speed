@@ -1,9 +1,19 @@
 
-_Check_Stats:
+Test_Speed_Master & Test_Speed_Slave:
+  return:
+    0 = 4800
+    1 = 9600
+    2 = 14400
+    3 = 19200
+    4 = 28800
+    5 = 38400
+    6 = 57600
+    7 = 115200
+    8 = 230400
+    9 = 345600
+    10 = 500000
 
-  1 = not done
-  2 = done and ok
-
-  4 = Error - Port down
-  5 = Error - Unit present but not able to achive speed 9600
-  6 = Error - Handshake failed after stepping one speed down after failure
+    90 = Error - Port down
+    91 = Error - Unit present but not able to achive speed 9600
+    92 = Error - Handshake failed after stepping one speed down after failure
+    93 = Error - Unknown

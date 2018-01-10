@@ -3,8 +3,7 @@
 
 #include <Auto_Serial_Speed.h>
 
-
-Auto_Serial_Speed Speed_Test(1);
+Auto_Serial_Speed Speed_Test;
 
 
 
@@ -17,10 +16,19 @@ void setup() {
 
 
   Serial.println("Master");
-  Speed_Test.Test_Speed_Master();
+  Serial.print("Serial 1: ");
+  Serial.println(Speed_Test.Test_Speed_Master(Serial1));
+  Serial.print("Serial 2: ");
+  Serial.println(Speed_Test.Test_Speed_Master(Serial2));
+  Serial.print("Serial 3: ");
+  Serial.println(Speed_Test.Test_Speed_Master(Serial3));
+
 
   // Serial.println("Slave");
-  // Speed_Test.Test_Speed_Slave();
+  // Serial.print("Serial 1: ");
+  // Serial.println(Speed_Test.Test_Speed_Slave(Serial1));
+  // Serial.print("Serial 2: ");
+  // Serial.println(Speed_Test.Test_Speed_Slave(Serial2));
 
 
   Serial.println("Doot Done - Speed Test");

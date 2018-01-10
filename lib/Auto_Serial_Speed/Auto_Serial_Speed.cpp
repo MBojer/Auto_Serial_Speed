@@ -1,18 +1,23 @@
 
 
-// --------------------------------------------- Auto_Serial_Speed ---------------------------------------------
 #include "Arduino.h"
 #include "Auto_Serial_Speed.h"
 
+// --------------------------------------------- Setup ---------------------------------------------
+Auto_Serial_Speed::Auto_Serial_Speed() {
+} // Auto_Serial_Speed
 
-bool Auto_Serial_Speed::Serial_Read_Match(String Match_String) {
 
-  if (Serial1.available() > 0)  {
+// --------------------------------------------- Auto_Serial_Speed ---------------------------------------------
+
+bool Auto_Serial_Speed::Serial_Read_Match(String Match_String, HardwareSerial &Serial_Port_Ref) {
+
+  if (Serial_Port_Ref.available() > 0)  {
     String Read_String;
     char c;
 
-    while (Serial1.available()) {
-      c = (char)Serial1.read();
+    while (Serial_Port_Ref.available()) {
+      c = (char)Serial_Port_Ref.read();
       Read_String += c;
     } // while
 
@@ -20,7 +25,7 @@ bool Auto_Serial_Speed::Serial_Read_Match(String Match_String) {
       Serial.println("MATCH");
       return true;
     }
-  } // if (Serial1.available() > 2)
+  } // if (Serial_Port_Ref.available() > 2)
 
   return false;
 
@@ -28,7 +33,7 @@ bool Auto_Serial_Speed::Serial_Read_Match(String Match_String) {
 
 
 
-bool Auto_Serial_Speed::Handshake_Master() {
+bool Auto_Serial_Speed::Handshake_Master(HardwareSerial &Serial_Port_Ref) {
 
   byte Send_Ignore = 4;
 
@@ -37,11 +42,11 @@ bool Auto_Serial_Speed::Handshake_Master() {
     if (Send_Ignore == 0)
     {
       Serial.print("+"); // rm
-      Serial1.println(Handshake_1); // rm
-      Serial1.flush();
+      Serial_Port_Ref.println(Handshake_1); // rm
+      Serial_Port_Ref.flush();
       Send_Ignore = 4;
     }
-    if (Serial_Read_Match(Handshake_2) == true)
+    if (Serial_Read_Match(Handshake_2, Serial_Port_Ref) == true)
     {
       return true;
     }
@@ -53,14 +58,14 @@ bool Auto_Serial_Speed::Handshake_Master() {
 }
 
 
-bool Auto_Serial_Speed::Handshake_Slave()
+bool Auto_Serial_Speed::Handshake_Slave(HardwareSerial &Serial_Port_Ref)
 {
   for (byte i = 0; i < Handshake_Loop_Count; i++)
   {
-    if (Serial_Read_Match(Handshake_1) == true)
+    if (Serial_Read_Match(Handshake_1, Serial_Port_Ref) == true)
     {
-      Serial1.println(Handshake_2);
-      Serial1.flush(); // flush to make sure the message gets send
+      Serial_Port_Ref.println(Handshake_2);
+      Serial_Port_Ref.flush(); // flush to make sure the message gets send
       return true;
     }
 
@@ -73,94 +78,71 @@ bool Auto_Serial_Speed::Handshake_Slave()
 
 
 // --------------------------------------------- Test_Speed_Master ---------------------------------------------
-byte Auto_Serial_Speed::Test_Speed_Master(HardwareSerial &Serial_Port) {
+byte Auto_Serial_Speed::Test_Speed_Master(HardwareSerial &Serial_Port_Ref) {
 
-  if (_Check_Stats != 1 && _Check_Stats != 2) return _Check_Stats; // Check already done
+  // +++++++++++++++++++++++++++++++++++ Speed test +++++++++++++++++++++++++++++++++++
+  for (byte i = 0; i < Last_Speed_To_Test + 1; i++)
+  {
+    Serial_Port_Ref.begin(Speed_Step(i));
 
-  if (_Serial_Port == 1) {
-
-    // +++++++++++++++++++++++++++++++++++ Speed test +++++++++++++++++++++++++++++++++++
-    for (byte i = 0; i < 8; i++)
+    if (Handshake_Master(Serial_Port_Ref) == false)
     {
-      Serial1.begin(Speed_Step(i));
-
-      if (Handshake_Master() == false)
+      if (i == 0) { // First check failed
+        return 90; // 90 = Error - Port down
+      }
+      else
       {
-        if (i == 0) { // First check failed
-          _Check_Stats = 4; // 4 = Error - Port down
-          return _Check_Stats;
+        Serial_Port_Ref.begin(Speed_Step(i - 1)); // Stepping one speed down
+
+        if (Handshake_Master(Serial_Port_Ref) == false)
+        {
+          return 92; // 92 = Error - Handshake failed after stepping one speed down after failure
         }
         else
         {
-          Serial1.begin(Speed_Step(i - 1)); // Stepping one speed down
-
-          if (Handshake_Master() == false)
-          {
-            _Check_Stats = 6; // 6 = Error - Handshake failed after stepping one speed down after failure
-            return _Check_Stats;
-          }
-          else
-          {
-            Selected_Speed = Speed_Step(i - 1);
-            _Check_Stats = 2; // 2 = done and ok
-            return _Check_Stats;
-          }
-        } // else
-      } // if (Handshake_Slave() == false)
-    } // for (byte i = 0; i < 8; i++)
-  } // _Serial_Port == 1
+          return Speed_Step(i - 1); // Speed OK
+        }
+      } // else
+    } // if (Handshake_Slave(Serial_Port_Ref) == false)
+  } // for (byte i = 0; i < Last_Speed_To_Test + 1; i++)
 
 
-  Selected_Speed = Speed_Step(7);
-  _Check_Stats = 2; // 2 = done and ok
-  return _Check_Stats;
+return Speed_Step(Last_Speed_To_Test); // MAX Speed OK;
 
 } // Test_Speed_Master
 
 
 // --------------------------------------------- Test_Speed_Slave ---------------------------------------------
-byte Auto_Serial_Speed::Test_Speed_Slave(HardwareSerial &Serial_Port) {
+byte Auto_Serial_Speed::Test_Speed_Slave(HardwareSerial &Serial_Port_Ref) {
 
-  if (_Check_Stats != 1 && _Check_Stats != 2) return _Check_Stats; // Check already done
+  // +++++++++++++++++++++++++++++++++++ Speed test +++++++++++++++++++++++++++++++++++
+  for (byte i = 0; i < Last_Speed_To_Test + 1; i++)
+  {
+    Serial_Port_Ref.begin(Speed_Step(i));
 
-  if (_Serial_Port == 1) {
-
-    // +++++++++++++++++++++++++++++++++++ Speed test +++++++++++++++++++++++++++++++++++
-    for (byte i = 0; i < 8; i++)
+    Serial.println(i); // rm
+    if (Handshake_Slave(Serial_Port_Ref) == false)
     {
-      Serial_Port.begin(Speed_Step(i));
-
-      Serial.println(i); // rm
-      if (Handshake_Slave() == false)
+      if (i == 0) { // First check failed
+        return 90; // 90 = Error - Port down
+      }
+      else
       {
-        if (i == 0) { // First check failed
-          _Check_Stats = 4; // 4 = Error - Port down
-          return _Check_Stats;
+        Serial_Port_Ref.begin(Speed_Step(i - 1)); // Stepping one speed down
+
+        if (Handshake_Slave(Serial_Port_Ref) == false)
+        {
+          return 92; // 92 = Error - Handshake failed after stepping one speed down after failure
         }
         else
         {
-          Serial1.begin(Speed_Step(i - 1)); // Stepping one speed down
+          return Speed_Step(i - 1); // Speed OK
+        }
+      } // else
+    } // if (Handshake_Slave(Serial_Port_Ref) == false)
+  } // for (byte i = 0; i < Last_Speed_To_Test + 1; i++)
 
-          if (Handshake_Slave() == false)
-          {
-            _Check_Stats = 6; // 6 = Error - Handshake failed after stepping one speed down after failure
-            return _Check_Stats;
-          }
-          else
-          {
-            Selected_Speed = Speed_Step(i - 1);
-            _Check_Stats = 2; // 2 = done and ok
-            return _Check_Stats;
-          }
-        } // else
-      } // if (Handshake_Slave() == false)
-    } // for (byte i = 0; i < 8; i++)
-  } // _Serial_Port == 1
-
-
-  Selected_Speed = Speed_Step(7);
-  _Check_Stats = 2; // 2 = done and ok
-  return _Check_Stats;
+return Speed_Step(Last_Speed_To_Test); // MAX Speed OK;
 
 } // Test_Speed_Slave
 
@@ -205,7 +187,21 @@ unsigned long Auto_Serial_Speed::Speed_Step(byte Step) {
       Serial.println("115200"); // rm
       return 115200;
 
+    case 8:
+      Serial.println("230400"); // rm
+      return 230400;
+
+    case 9:
+      Serial.println("345600"); // rm
+      return 345600;
+
+    case 10:
+      Serial.println("500000"); // rm
+      return 500000;
+
+
     default:
+      Serial.println("Defalt"); // rm
       Serial.println("115200"); // rm
       return 115200;
 
