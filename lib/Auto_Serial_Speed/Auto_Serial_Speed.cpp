@@ -5,12 +5,6 @@
 #include "Auto_Serial_Speed.h"
 
 
-// --------------------------------------------- Setup ---------------------------------------------
-Auto_Serial_Speed::Auto_Serial_Speed(byte Serial_Port) {
-  _Serial_Port = Serial_Port;
-} // Auto_Serial_Speed
-
-
 bool Auto_Serial_Speed::Serial_Read_Match(String Match_String) {
 
   if (Serial1.available() > 0)  {
@@ -79,7 +73,7 @@ bool Auto_Serial_Speed::Handshake_Slave()
 
 
 // --------------------------------------------- Test_Speed_Master ---------------------------------------------
-byte Auto_Serial_Speed::Test_Speed_Master() {
+byte Auto_Serial_Speed::Test_Speed_Master(HardwareSerial &Serial_Port) {
 
   if (_Check_Stats != 1 && _Check_Stats != 2) return _Check_Stats; // Check already done
 
@@ -125,7 +119,7 @@ byte Auto_Serial_Speed::Test_Speed_Master() {
 
 
 // --------------------------------------------- Test_Speed_Slave ---------------------------------------------
-byte Auto_Serial_Speed::Test_Speed_Slave() {
+byte Auto_Serial_Speed::Test_Speed_Slave(HardwareSerial &Serial_Port) {
 
   if (_Check_Stats != 1 && _Check_Stats != 2) return _Check_Stats; // Check already done
 
@@ -134,7 +128,7 @@ byte Auto_Serial_Speed::Test_Speed_Slave() {
     // +++++++++++++++++++++++++++++++++++ Speed test +++++++++++++++++++++++++++++++++++
     for (byte i = 0; i < 8; i++)
     {
-      Serial1.begin(Speed_Step(i));
+      Serial_Port.begin(Speed_Step(i));
 
       Serial.println(i); // rm
       if (Handshake_Slave() == false)

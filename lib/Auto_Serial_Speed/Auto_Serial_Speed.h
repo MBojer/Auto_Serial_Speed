@@ -10,13 +10,9 @@
   class Auto_Serial_Speed {
 
     public:
-      // --------------------------------------------- Setup ---------------------------------------------
-      Auto_Serial_Speed(byte Serial_Port);
-
-
       // --------------------------------------------- Auto_Serial_Speed ---------------------------------------------
-      byte Test_Speed_Master();
-      byte Test_Speed_Slave();
+      byte Test_Speed_Master(HardwareSerial &Serial_Port);
+      byte Test_Speed_Slave(HardwareSerial &Serial_Port);
 
       bool Boot_Check(bool Mater);
 
