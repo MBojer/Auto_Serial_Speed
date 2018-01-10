@@ -24,13 +24,6 @@ void setup() {
   Serial.println(Speed_Test.Test_Speed_Master(Serial3));
 
 
-  // Serial.println("Slave");
-  // Serial.print("Serial 1: ");
-  // Serial.println(Speed_Test.Test_Speed_Slave(Serial1));
-  // Serial.print("Serial 2: ");
-  // Serial.println(Speed_Test.Test_Speed_Slave(Serial2));
-
-
   Serial.println("Doot Done - Speed Test");
 
 } // setup
