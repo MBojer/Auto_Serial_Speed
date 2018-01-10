@@ -21,6 +21,8 @@
 
       unsigned long Speed_Step(byte Step);
 
+      String Error_Text(byte Error_Number);
+
 
     private:
       // --------------------------------------------- private ---------------------------------------------

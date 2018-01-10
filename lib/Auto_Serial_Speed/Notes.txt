@@ -16,4 +16,3 @@ Test_Speed_Master & Test_Speed_Slave:
     90 = Error - Port down
     91 = Error - Unit present but not able to achive speed 9600
     92 = Error - Handshake failed after stepping one speed down after failure
-    93 = Error - Unknown
