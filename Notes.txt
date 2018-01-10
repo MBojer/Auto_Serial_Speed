@@ -1,3 +1,4 @@
+https://github.com/MBojer/Auto_Serial_Speed.git
 
 Test_Speed_Master & Test_Speed_Slave:
   return:
